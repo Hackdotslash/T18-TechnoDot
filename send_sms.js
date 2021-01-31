@@ -17,10 +17,14 @@ app.post('/sms', (req, res) => {
   console.log(typeof req.body.Body);
   const code = req.body.Body;
   console.log(code);
-  if (code == '0101') {
-    twiml.message('We are sending you details of the nearest hospital!');
+  code='HT 734012';
+  const head = code.slice(0,2);
+  const pin = code.slice(3);
+  if (head == 'HT') {
+      getCoordinates(pin);
+      twiml.message('We are sending you details of the nearest hospital!');
   }
-  else if (code == '0102') {
+  else if (head == 'AM') {
     twiml.message('We are sending you ambulance to your location in 10 min.!');
   }
   else if (code == '0103') {
@@ -42,7 +46,7 @@ function getCoordinates(address){
     .then(data => {
       const latitude = data.results.geometry.location.lat;
       const longitude = data.results.geometry.location.lng;
-      console.log({latitude, longitude})
+      console.log({latitude, longitude});
     })
 }
 
