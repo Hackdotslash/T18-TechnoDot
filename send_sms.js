@@ -35,6 +35,17 @@ app.post('/sms', (req, res) => {
   res.end(twiml.toString());
 });
 
+// function to find latitude & longitude from zip code
+function getCoordinates(address){
+  fetch("https://maps.googleapis.com/maps/api/geocode/json?address="+address+'&key='+process.env.API_KEY)
+    .then(response => response.json())
+    .then(data => {
+      const latitude = data.results.geometry.location.lat;
+      const longitude = data.results.geometry.location.lng;
+      console.log({latitude, longitude})
+    })
+}
+
 // listen for requests 
 const listener = app.listen(5000, () => {
   console.log("Your app is listening on port " + listener.address().port);
